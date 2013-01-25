@@ -132,7 +132,7 @@
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FxMaths\FxMaths\FxMaths.csproj">
+    <ProjectReference Include="..\FxMath\FxMaths\FxMaths.csproj">
       <Project>{4191B0A0-0064-4673-9FEE-A33B70E3D3F0}</Project>
       <Name>FxMaths</Name>
     </ProjectReference>
