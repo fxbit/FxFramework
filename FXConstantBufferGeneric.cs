@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-using SlimDX;
-using SlimDX.Direct3D11;
-using SlimDX.D3DCompiler;
+using SharpDX;
+using SharpDX.Direct3D11;
+using SharpDX.D3DCompiler;
 
 // resolve conflict - DXGI.Device & Direct3D10.Device
-using Device = SlimDX.Direct3D11.Device;
-using Buffer = SlimDX.Direct3D11.Buffer;
-using Effect = SlimDX.Direct3D11.Effect;
-using EffectFlags = SlimDX.D3DCompiler.EffectFlags;
+using Device = SharpDX.Direct3D11.Device;
+using Buffer = SharpDX.Direct3D11.Buffer;
+using Effect = SharpDX.Direct3D11.Effect;
+using EffectFlags = SharpDX.D3DCompiler.EffectFlags;
 
 
 
@@ -288,7 +288,7 @@ namespace FXFramework
                     dataStream.Seek( 0, System.IO.SeekOrigin.Begin );
 
                     // pass the data to the gpu
-                    var dataBox = new DataBox( 0, 0, dataStream );
+                    var dataBox = new DataBox(dataStream.DataPointer, 0, 0);
                     deviceContext.UpdateSubresource( dataBox, buffer, 0 );
 
                     isDirty = false;
@@ -297,16 +297,16 @@ namespace FXFramework
                 // set the buffer to the shader
                 switch ( type ) {
                     case ShaderType.Pixel:
-                        deviceContext.PixelShader.SetConstantBuffer( Buffer, Slot_PS );
+                        deviceContext.PixelShader.SetConstantBuffer( Slot_PS, Buffer );
                         break;
                     case ShaderType.Vertex:
-                        deviceContext.VertexShader.SetConstantBuffer( Buffer, Slot_VS );
+                        deviceContext.VertexShader.SetConstantBuffer(Slot_VS, Buffer );
                         break;
                     case ShaderType.Compute:
-                        deviceContext.ComputeShader.SetConstantBuffer( Buffer, Slot_CS );
+                        deviceContext.ComputeShader.SetConstantBuffer(Slot_CS, Buffer );
                         break;
                     case ShaderType.Geometry:
-                        deviceContext.GeometryShader.SetConstantBuffer( Buffer, Slot_GS );
+                        deviceContext.GeometryShader.SetConstantBuffer(Slot_GS, Buffer );
                         break;
                 }
             }

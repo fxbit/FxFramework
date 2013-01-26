@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using SlimDX.D3DCompiler;
-using SlimDX;
-using SlimDX.DXGI;
-using SlimDX.Direct3D11;
-using Buffer = SlimDX.Direct3D11.Buffer;
-using D3D = SlimDX.Direct3D11;
+using SharpDX.D3DCompiler;
+using SharpDX;
+using SharpDX.DXGI;
+using SharpDX.Direct3D11;
+using Buffer = SharpDX.Direct3D11.Buffer;
+using D3D = SharpDX.Direct3D11;
 
 using FxMaths.GMaps;
+using SharpDX.Direct3D;
 
 namespace FXFramework
 {
@@ -78,7 +79,7 @@ namespace FXFramework
                     whereIsExist |= ShaderType.Pixel;
 
                     // find the access type
-                    if ( ibd.Type == ShaderInputType.RWByteAddress  || (int)ibd.Type == 4 )
+                    if ( ibd.Type == ShaderInputType.UnorderedAccessViewRWByteAddress  || (int)ibd.Type == 4 )
                         accessViewType = AccessViewType.UAV;
                     else
                         accessViewType = AccessViewType.SRV;
@@ -121,7 +122,7 @@ namespace FXFramework
                     whereIsExist |= ShaderType.Compute;
 
                     // find the access type
-                    if ( ibd.Type == ShaderInputType.RWByteAddress || ibd.Type == ShaderInputType.RWStructured || ibd.Type == ShaderInputType.RWStructuredWithCounter || (int)ibd.Type == 4)
+                    if (ibd.Type == ShaderInputType.UnorderedAccessViewRWByteAddress || ibd.Type == ShaderInputType.UnorderedAccessViewRWStructured || ibd.Type == ShaderInputType.UnorderedAccessViewRWStructuredWithCounter || (int)ibd.Type == 4)
                         accessViewType = AccessViewType.UAV;
                     else
                         accessViewType = AccessViewType.SRV;
@@ -198,21 +199,21 @@ namespace FXFramework
             switch ( type ) {
                 case ShaderType.Pixel:
                     if ( accessViewType == AccessViewType.SRV )
-                        deviceContext.PixelShader.SetShaderResource( localSRV, Slot_PS );
+                        deviceContext.PixelShader.SetShaderResource(Slot_PS , localSRV);
                     //else
                         //deviceContext.PixelShader.SetUnorderedAccessView( localUAV, Slot_PS );
                     break;
                 case ShaderType.Vertex:
-                    deviceContext.VertexShader.SetShaderResource( localSRV, Slot_VS );
+                    deviceContext.VertexShader.SetShaderResource(Slot_VS, localSRV);
                     break;
                 case ShaderType.Compute:
                     if ( accessViewType == AccessViewType.SRV)
-                        deviceContext.ComputeShader.SetShaderResource( localSRV, Slot_CS );
+                        deviceContext.ComputeShader.SetShaderResource(Slot_CS, localSRV);
                     else
-                        deviceContext.ComputeShader.SetUnorderedAccessView( localUAV, Slot_CS );
+                        deviceContext.ComputeShader.SetUnorderedAccessView( Slot_CS, localUAV );
                     break;
                 case ShaderType.Geometry:
-                    deviceContext.GeometryShader.SetShaderResource( localSRV, Slot_GS );
+                    deviceContext.GeometryShader.SetShaderResource(Slot_GS, localSRV);
                     break;
             }
         }
@@ -239,19 +240,19 @@ namespace FXFramework
             {
                 case ShaderType.Pixel:
                     if (accessViewType == AccessViewType.SRV)
-                        deviceContext.PixelShader.SetShaderResource(null, Slot_CS);
+                        deviceContext.PixelShader.SetShaderResource(Slot_CS, null);
                     break;
                 case ShaderType.Vertex:
-                    deviceContext.VertexShader.SetShaderResource(null, Slot_VS);
+                    deviceContext.VertexShader.SetShaderResource(Slot_VS, null);
                     break;
                 case ShaderType.Compute:
                     if (accessViewType == AccessViewType.SRV)
-                        deviceContext.ComputeShader.SetShaderResource(null, Slot_CS);
+                        deviceContext.ComputeShader.SetShaderResource(Slot_CS, null);
                     else
-                        deviceContext.ComputeShader.SetUnorderedAccessView(null, Slot_CS);
+                        deviceContext.ComputeShader.SetUnorderedAccessView(Slot_CS, null);
                     break;
                 case ShaderType.Geometry:
-                    deviceContext.GeometryShader.SetShaderResource(null, Slot_GS);
+                    deviceContext.GeometryShader.SetShaderResource(Slot_GS, null);
                     break;
             }
         }
@@ -277,15 +278,15 @@ namespace FXFramework
 
         #region UAV/Staging
 
-        public static ShaderResourceView InitSRVResource(SlimDX.Direct3D11.Device dev, SlimDX.Direct3D11.Buffer buffer)
+        public static ShaderResourceView InitSRVResource(SharpDX.Direct3D11.Device dev, SharpDX.Direct3D11.Buffer buffer)
         {
             // create desc for the UAV
             ShaderResourceViewDescription srvbufferDesc = new ShaderResourceViewDescription
             {
                 Dimension = ShaderResourceViewDimension.ExtendedBuffer,
-                FirstElement = 0,
+                //FirstElement = 0,
                 Format = Format.Unknown,
-                ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride,
+                //ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride,
             };
 
             ShaderResourceView tmpSRV = new ShaderResourceView(dev, buffer, srvbufferDesc);
@@ -296,15 +297,15 @@ namespace FXFramework
         }
 
 
-        public static UnorderedAccessView InitUAVResource(SlimDX.Direct3D11.Device dev, SlimDX.Direct3D11.Buffer buffer)
+        public static UnorderedAccessView InitUAVResource(SharpDX.Direct3D11.Device dev, SharpDX.Direct3D11.Buffer buffer)
         {
             // create desc for the UAV
             UnorderedAccessViewDescription uavbufferDesc = new UnorderedAccessViewDescription
             {
                 Dimension = UnorderedAccessViewDimension.Buffer,
-                FirstElement = 0,
+                //FirstElement = 0,
                 Format = Format.Unknown,
-                ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride,
+                //ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride,
             };
             
             UnorderedAccessView tmpUAV = new UnorderedAccessView(dev, buffer, uavbufferDesc);
@@ -322,18 +323,19 @@ namespace FXFramework
         /// <param name="cpuBuffer"></param>
         /// <param name="gpuBuffer"></param>
         /// <param name="localBuffer"></param>
-        public static void ReadBuffer<T>(SlimDX.Direct3D11.Device dev, Buffer cpuBuffer, Buffer gpuBuffer, ref T[] localBuffer) where T:struct
+        public static void ReadBuffer<T>(SharpDX.Direct3D11.Device dev, Buffer cpuBuffer, Buffer gpuBuffer, ref T[] localBuffer) where T:struct
         {
+            DataStream stream;
 
             // copy the data from GPU
             dev.ImmediateContext.CopyResource(gpuBuffer, cpuBuffer);
 
             // map the data to be able to read it from CPU
-            DataBox outputData = dev.ImmediateContext.MapSubresource(cpuBuffer, D3D.MapMode.Read, D3D.MapFlags.None);
+            DataBox outputData = dev.ImmediateContext.MapSubresource(cpuBuffer, D3D.MapMode.Read, D3D.MapFlags.None, out stream);
 
             // read the data from the gpu
             for (int i = 0; i < localBuffer.Length; i++)
-                localBuffer[i] = outputData.Data.Read<T>();
+                localBuffer[i] = stream.Read<T>();
 
             // unmap the data
             dev.ImmediateContext.UnmapSubresource(cpuBuffer, 0);
@@ -348,33 +350,36 @@ namespace FXFramework
         /// <param name="cpuBuffer"></param>
         /// <param name="gpuBuffer"></param>
         /// <param name="localBuffer"></param>
-        public static void ReadBufferVector<T>(SlimDX.Direct3D11.Device dev, Buffer cpuBuffer, Buffer gpuBuffer, ref IVertex<T>[] localBuffer) where T : struct , IComparable<T>
+        public static void ReadBufferVector<T>(SharpDX.Direct3D11.Device dev, Buffer cpuBuffer, Buffer gpuBuffer, ref IVertex<T>[] localBuffer) where T : struct , IComparable<T>
         {
+            DataStream stream;
 
             // copy the data from GPU
             dev.ImmediateContext.CopyResource(gpuBuffer, cpuBuffer);
 
             // map the data to be able to read it from CPU
-            DataBox outputData = dev.ImmediateContext.MapSubresource(cpuBuffer, D3D.MapMode.Read, D3D.MapFlags.None);
+            DataBox outputData = dev.ImmediateContext.MapSubresource(cpuBuffer, D3D.MapMode.Read, D3D.MapFlags.None, out stream);
 
             // read the data from the gpu
             for (int i = 0; i < localBuffer.Length; i++)
             {
-                localBuffer[i] = (IVertex<T>)FxMaths.Vector.FxVector2f.sReadFromDataStream(outputData.Data);
+                localBuffer[i] = (IVertex<T>)FxMaths.Vector.FxVector2f.sReadFromDataStream(stream);
             }
 
             // unmap the data
             dev.ImmediateContext.UnmapSubresource(cpuBuffer, 0);
         }
 
-        public static void WriteBufferStuct<T>(SlimDX.Direct3D11.Device dev, Buffer cpuBuffer, Buffer gpuBuffer, T[] inputBuffer) where T : struct
+        public static void WriteBufferStuct<T>(SharpDX.Direct3D11.Device dev, Buffer cpuBuffer, Buffer gpuBuffer, T[] inputBuffer) where T : struct
         {
+            DataStream stream;
+
             // map the data to be able to read it from CPU
-            DataBox outputData = dev.ImmediateContext.MapSubresource(cpuBuffer, D3D.MapMode.WriteDiscard, D3D.MapFlags.None);
+            DataBox outputData = dev.ImmediateContext.MapSubresource(cpuBuffer, D3D.MapMode.WriteDiscard, D3D.MapFlags.None, out stream);
 
             // read the data from the gpu
             for (int i = 0; i < inputBuffer.Length; i++)
-                outputData.Data.Write<T>(inputBuffer[i]);
+                stream.Write<T>(inputBuffer[i]);
 
             // unmap the data
             dev.ImmediateContext.UnmapSubresource(cpuBuffer, 0);
@@ -384,14 +389,16 @@ namespace FXFramework
             dev.ImmediateContext.CopyResource(cpuBuffer, gpuBuffer);
         }
 
-        public static void WriteBufferVertex<T>(SlimDX.Direct3D11.Device dev, Buffer cpuBuffer, Buffer gpuBuffer, ICollection<IVertex<T>> inputBuffer) where T : struct , IComparable<T>
+        public static void WriteBufferVertex<T>(SharpDX.Direct3D11.Device dev, Buffer cpuBuffer, Buffer gpuBuffer, ICollection<IVertex<T>> inputBuffer) where T : struct , IComparable<T>
         {
+            DataStream stream;
+
             // map the data to be able to read it from CPU
-            DataBox outputData = dev.ImmediateContext.MapSubresource(cpuBuffer, D3D.MapMode.Write, D3D.MapFlags.None);
+            DataBox outputData = dev.ImmediateContext.MapSubresource(cpuBuffer, D3D.MapMode.Write, D3D.MapFlags.None, out stream);
 
             // read the data from the gpu
             foreach (var vec in inputBuffer)
-                vec.WriteToDataStream(outputData.Data);
+                vec.WriteToDataStream(stream);
 
             
             // unmap the data

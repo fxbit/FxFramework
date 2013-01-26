@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using SlimDX.D3DCompiler;
-using SlimDX;
+using SharpDX.D3DCompiler;
+using SharpDX;
 
 #if FXMaths
 using FxMaths.Vector;
@@ -30,7 +30,7 @@ namespace FXFramework
             /// check if the class is matrix
             if ( varDesc.Class == ShaderVariableClass.MatrixColumns ) {
 
-                #region slimdx Matrix
+                #region SharpDX Matrix
                 if ( c_sharp_type is Matrix ) {
                     return ( varDesc.Type == ShaderVariableType.Float );
                 }
@@ -41,17 +41,17 @@ namespace FXFramework
             /// check if is vector
             if ( varDesc.Class == ShaderVariableClass.Vector ) {
 
-                #region slimdx vectors
+                #region SharpDX vectors
                 if ( c_sharp_type is Vector2 ) {
-                    return ( varDesc.Type == ShaderVariableType.Float ) && varDesc.Columns == 2;
+                    return (varDesc.Type == ShaderVariableType.Float) && varDesc.ColumnCount == 2;
                 }
 
                 if ( c_sharp_type is Vector3 ) {
-                    return ( varDesc.Type == ShaderVariableType.Float ) && varDesc.Columns == 3;
+                    return (varDesc.Type == ShaderVariableType.Float) && varDesc.ColumnCount == 3;
                 }
 
                 if ( c_sharp_type is Vector4 ) {
-                    return ( varDesc.Type == ShaderVariableType.Float ) && varDesc.Columns == 4;
+                    return (varDesc.Type == ShaderVariableType.Float) && varDesc.ColumnCount == 4;
                 }
                 #endregion
 
@@ -59,45 +59,45 @@ namespace FXFramework
 
                 #region FxVector float
                 if ( c_sharp_type is FxVector2f ) {
-                    return ( varDesc.Type == ShaderVariableType.Float ) && varDesc.Columns == 2;
+                    return (varDesc.Type == ShaderVariableType.Float) && varDesc.ColumnCount == 2;
                 }
 
                 if ( c_sharp_type is FxVector3f ) {
-                    return ( varDesc.Type == ShaderVariableType.Float ) && varDesc.Columns == 3;
+                    return (varDesc.Type == ShaderVariableType.Float) && varDesc.ColumnCount == 3;
                 }
 
                 if ( c_sharp_type is FxVector4f ) {
-                    return ( varDesc.Type == ShaderVariableType.Float ) && varDesc.Columns == 4;
+                    return (varDesc.Type == ShaderVariableType.Float) && varDesc.ColumnCount == 4;
                 }
                 #endregion
 
 
                 #region FxVector int
                 if ( c_sharp_type is FxVector2i ) {
-                    return ( varDesc.Type == ShaderVariableType.Int ) && varDesc.Columns == 2;
+                    return (varDesc.Type == ShaderVariableType.Int) && varDesc.ColumnCount == 2;
                 }
 
                 if ( c_sharp_type is FxVector3i ) {
-                    return ( varDesc.Type == ShaderVariableType.Int ) && varDesc.Columns == 3;
+                    return (varDesc.Type == ShaderVariableType.Int) && varDesc.ColumnCount == 3;
                 }
 
                 if ( c_sharp_type is FxVector4i ) {
-                    return ( varDesc.Type == ShaderVariableType.Int ) && varDesc.Columns == 4;
+                    return (varDesc.Type == ShaderVariableType.Int) && varDesc.ColumnCount == 4;
                 }
                 #endregion
 
 
                 #region FxVector float
                 if ( c_sharp_type is FxVector2b ) {
-                    return ( varDesc.Type == ShaderVariableType.UInt8 ) && varDesc.Columns == 2;
+                    return (varDesc.Type == ShaderVariableType.UInt8) && varDesc.ColumnCount == 2;
                 }
 
                 if ( c_sharp_type is FxVector3b ) {
-                    return ( varDesc.Type == ShaderVariableType.UInt8 ) && varDesc.Columns == 3;
+                    return (varDesc.Type == ShaderVariableType.UInt8) && varDesc.ColumnCount == 3;
                 }
 
                 if ( c_sharp_type is FxVector4b ) {
-                    return ( varDesc.Type == ShaderVariableType.UInt8 ) && varDesc.Columns == 4;
+                    return (varDesc.Type == ShaderVariableType.UInt8) && varDesc.ColumnCount == 4;
                 }
                 #endregion
 
@@ -141,7 +141,7 @@ namespace FXFramework
                 int size = Marshal.SizeOf( typeof( T ) )/4; // in 4byte form
 
                 // check the size 
-                if ( size == varDesc.Columns )
+                if (size == varDesc.ColumnCount)
                     return true;
                 else
                     return false;

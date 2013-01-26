@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 
 
-using SlimDX;
-using SlimDX.Direct3D11;
-using SlimDX.D3DCompiler;
+using SharpDX;
+using SharpDX.Direct3D11;
+using SharpDX.D3DCompiler;
 
 // resolve conflict - DXGI.Device & Direct3D10.Device
-using Device = SlimDX.Direct3D11.Device;
-using Buffer = SlimDX.Direct3D11.Buffer;
-using Effect = SlimDX.Direct3D11.Effect;
-using EffectFlags = SlimDX.D3DCompiler.EffectFlags;
+using Device = SharpDX.Direct3D11.Device;
+using Buffer = SharpDX.Direct3D11.Buffer;
+using Effect = SharpDX.Direct3D11.Effect;
+using EffectFlags = SharpDX.D3DCompiler.EffectFlags;
 
 
 namespace FXFramework
@@ -285,7 +285,7 @@ namespace FXFramework
                 dataStream.Seek( 0, System.IO.SeekOrigin.Begin );
 
                 // pass the data to the gpu
-                var dataBox = new DataBox( 0, 0, dataStream );
+                var dataBox = new DataBox(dataStream.DataPointer, 0, 0);
                 deviceContext.UpdateSubresource( dataBox, buffer, 0 );
 
                 // clean the flag 
@@ -295,16 +295,16 @@ namespace FXFramework
             // we can use switch here beacuse we call this commit only for one shader type
             switch ( type ) {
                 case ShaderType.Pixel:
-                    deviceContext.PixelShader.SetConstantBuffer( Buffer, slot_ps );
+                    deviceContext.PixelShader.SetConstantBuffer(slot_ps, Buffer);
                     break;
                 case ShaderType.Vertex:
-                    deviceContext.VertexShader.SetConstantBuffer( Buffer, slot_vs );
+                    deviceContext.VertexShader.SetConstantBuffer(slot_vs, Buffer);
                     break;
                 case ShaderType.Compute:
-                    deviceContext.ComputeShader.SetConstantBuffer( Buffer, slot_cs );
+                    deviceContext.ComputeShader.SetConstantBuffer(slot_cs, Buffer);
                     break;
                 case ShaderType.Geometry:
-                    deviceContext.GeometryShader.SetConstantBuffer( Buffer, slot_gs );
+                    deviceContext.GeometryShader.SetConstantBuffer(slot_gs, Buffer);
                     break;
             }
         }
