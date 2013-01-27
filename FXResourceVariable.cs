@@ -284,9 +284,13 @@ namespace FXFramework
             ShaderResourceViewDescription srvbufferDesc = new ShaderResourceViewDescription
             {
                 Dimension = ShaderResourceViewDimension.ExtendedBuffer,
-                //FirstElement = 0,
                 Format = Format.Unknown,
-                //ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride,
+                Buffer = new ShaderResourceViewDescription.BufferResource
+                {
+                    FirstElement = 0,
+                    ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride,
+
+                },
             };
 
             ShaderResourceView tmpSRV = new ShaderResourceView(dev, buffer, srvbufferDesc);
@@ -303,10 +307,14 @@ namespace FXFramework
             UnorderedAccessViewDescription uavbufferDesc = new UnorderedAccessViewDescription
             {
                 Dimension = UnorderedAccessViewDimension.Buffer,
-                //FirstElement = 0,
                 Format = Format.Unknown,
-                //ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride,
+                Buffer = new UnorderedAccessViewDescription.BufferResource
+                {
+                    FirstElement = 0,
+                    ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride,
+                },
             };
+
             
             UnorderedAccessView tmpUAV = new UnorderedAccessView(dev, buffer, uavbufferDesc);
             tmpUAV.DebugName = "UAV_"+buffer.DebugName;
