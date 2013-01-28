@@ -108,19 +108,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="SharpDX">
-      <HintPath>..\..\..\SharpDX\Bin\Signed-net40\SharpDX.dll</HintPath>
+      <HintPath>..\SharpDX\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.D3DCompiler">
-      <HintPath>..\..\..\SharpDX\Bin\Signed-net40\SharpDX.D3DCompiler.dll</HintPath>
+      <HintPath>..\SharpDX\SharpDX.D3DCompiler.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D11">
-      <HintPath>..\..\..\SharpDX\Bin\Signed-net40\SharpDX.Direct3D11.dll</HintPath>
+      <HintPath>..\SharpDX\SharpDX.Direct3D11.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D11.Effects">
-      <HintPath>..\..\..\SharpDX\Bin\Signed-net40\SharpDX.Direct3D11.Effects.dll</HintPath>
+      <HintPath>..\SharpDX\SharpDX.Direct3D11.Effects.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DXGI">
-      <HintPath>..\..\..\SharpDX\Bin\Signed-net40\SharpDX.DXGI.dll</HintPath>
+      <HintPath>..\SharpDX\SharpDX.DXGI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
