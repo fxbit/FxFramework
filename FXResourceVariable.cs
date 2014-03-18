@@ -385,7 +385,7 @@ namespace FXFramework
             // map the data to be able to read it from CPU
             DataBox outputData = dev.ImmediateContext.MapSubresource(cpuBuffer, D3D.MapMode.WriteDiscard, D3D.MapFlags.None, out stream);
 
-            // read the data from the gpu
+            // write the data from the gpu
             for (int i = 0; i < inputBuffer.Length; i++)
                 stream.Write<T>(inputBuffer[i]);
 
@@ -404,7 +404,7 @@ namespace FXFramework
             // map the data to be able to read it from CPU
             DataBox outputData = dev.ImmediateContext.MapSubresource(cpuBuffer, D3D.MapMode.Write, D3D.MapFlags.None, out stream);
 
-            // read the data from the gpu
+            // write the data from the gpu
             foreach (var vec in inputBuffer)
                 vec.WriteToDataStream(stream);
 
@@ -414,6 +414,23 @@ namespace FXFramework
 
             // copy the data to GPU
             dev.ImmediateContext.CopyResource(cpuBuffer ,gpuBuffer);
+
+        }
+
+        public static void WriteBuffer(SharpDX.Direct3D11.Device dev, Buffer cpuBuffer, Buffer gpuBuffer, DataStream streamIn)
+        {
+            DataStream stream;
+            // map the data to be able to read it from CPU
+            DataBox outputData = dev.ImmediateContext.MapSubresource(cpuBuffer, D3D.MapMode.Write, D3D.MapFlags.None, out stream);
+
+            // read the data from the gpu
+            streamIn.CopyTo(stream);
+
+            // unmap the data
+            dev.ImmediateContext.UnmapSubresource(cpuBuffer, 0);
+
+            // copy the data to GPU
+            dev.ImmediateContext.CopyResource(cpuBuffer, gpuBuffer);
 
         }
         #endregion

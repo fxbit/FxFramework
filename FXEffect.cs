@@ -224,7 +224,7 @@ namespace FXFramework
                 IncludedShaders |= ShaderType.Geometry;
 
                 // init the shader
-                this.GeometryShader = new GeometryShader( dev, gsByteCode );
+                GeometryShader = new GeometryShader( dev, gsByteCode );
 
                 // create  the reflection of shaders
                 GeometryShaderReflection = new ShaderReflection( gsByteCode );
