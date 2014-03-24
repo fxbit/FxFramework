@@ -326,48 +326,70 @@ namespace FXFramework
             // =====================  set the shaders =====================
 
             // --------  set the Pixel shader ----------
-            
-            if ( IncludedShaders.HasFlag( ShaderType.Pixel ) ) {
+
+            if (IncludedShaders.HasFlag(ShaderType.Pixel))
+            {
                 // set the shader
-                deviceContext.PixelShader.Set( PixelShader );
+                deviceContext.PixelShader.Set(PixelShader);
 
                 // set the buffers
-                foreach ( IFXResources cb in ListWithConstantBufferOfPixel )
-                    cb.Commit( deviceContext , ShaderType.Pixel);
+                foreach (IFXResources cb in ListWithConstantBufferOfPixel)
+                    cb.Commit(deviceContext, ShaderType.Pixel);
+            }
+            else
+            {
+                deviceContext.PixelShader.Set(null);
             }
 
             // --------  set the Vertex shader ----------
 
-            if ( IncludedShaders.HasFlag( ShaderType.Vertex ) ) {
+            if (IncludedShaders.HasFlag(ShaderType.Vertex))
+            {
                 // set the shader
-                deviceContext.VertexShader.Set( VertexShader );
+                deviceContext.VertexShader.Set(VertexShader);
 
                 // set the buffers
-                foreach ( IFXResources cb in ListWithConstantBufferOfVertex )
-                    cb.Commit( deviceContext, ShaderType.Vertex );
+                foreach (IFXResources cb in ListWithConstantBufferOfVertex)
+                    cb.Commit(deviceContext, ShaderType.Vertex);
+            }
+            else
+            {
+                deviceContext.VertexShader.Set(null);
             }
 
             // --------  set the Compute shader ----------
 
-            if ( IncludedShaders.HasFlag( ShaderType.Compute ) ) {
+            if (IncludedShaders.HasFlag(ShaderType.Compute))
+            {
                 // set the shader
-                deviceContext.ComputeShader.Set( ComputeShader );
+                deviceContext.ComputeShader.Set(ComputeShader);
 
                 // set the buffers
-                foreach ( IFXResources cb in ListWithConstantBufferOfCompute )
-                    cb.Commit( deviceContext, ShaderType.Compute );
+                foreach (IFXResources cb in ListWithConstantBufferOfCompute)
+                    cb.Commit(deviceContext, ShaderType.Compute);
             }
+            else
+            {
+                deviceContext.ComputeShader.Set(null);
+            }
+
 
             // --------  set the Geometry shader ----------
 
-            if ( IncludedShaders.HasFlag( ShaderType.Geometry ) ) {
+            if (IncludedShaders.HasFlag(ShaderType.Geometry))
+            {
                 // set the shader
-                deviceContext.GeometryShader.Set( GeometryShader );
+                deviceContext.GeometryShader.Set(GeometryShader);
 
                 // set the buffers
-                foreach ( IFXResources cb in ListWithConstantBufferOfGeometry )
-                    cb.Commit( deviceContext, ShaderType.Geometry );
+                foreach (IFXResources cb in ListWithConstantBufferOfGeometry)
+                    cb.Commit(deviceContext, ShaderType.Geometry);
             }
+            else
+            {
+                deviceContext.GeometryShader.Set(null);
+            }
+
 
 
         }
